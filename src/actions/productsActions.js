@@ -1,4 +1,4 @@
-import {ADD_PRODUCT, ADD_PRODUCT_ERR, ADD_PRODUCT_SUCCESSFULLY} from '../types';
+import {ADD_PRODUCT, ADD_PRODUCT_ERR, ADD_PRODUCT_SUCCESSFULLY, DOWNLOAD_PRODUCTS, DOWNLOAD_PRODUCTS_ERR, DOWNLOAD_PRODUCTS_SUCCESSFULLY} from '../types';
 import axiosClient from '../config/axios';
 import Swal from 'sweetalert2';
 
@@ -37,4 +37,30 @@ const addProductSucccess = (product) => ({
 
 const addProductErr = () => ({
     type: ADD_PRODUCT_ERR
+})
+
+export function getProductsAction() {
+    return async (dispatch) => {
+        dispatch(downloadProducts());
+
+        try {
+            const {data} = await axiosClient.get('/productos');
+            dispatch(downloadSuccess(data));
+        } catch (e) {
+            dispatch(downloadErr());
+        }
+    }
+}
+
+const downloadProducts = () => ({
+    type: DOWNLOAD_PRODUCTS,
+})
+
+const downloadSuccess = (products) => ({
+    type: DOWNLOAD_PRODUCTS_SUCCESSFULLY,
+    payload: products,
+});
+
+const downloadErr = () => ({
+    type: DOWNLOAD_PRODUCTS_ERR,
 })
