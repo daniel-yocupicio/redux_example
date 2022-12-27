@@ -1,6 +1,39 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+
+//redux
+import {useDispatch, useSelector} from 'react-redux';
+import { editProductAction } from '../actions/productsActions';
 
 const EditProduct = () => {
+    const dispatch = useDispatch();
+    const history = useNavigate();
+    const [product, saveProduct] = useState({
+        name: '',
+        price: '',
+    });
+    
+    const editProduct = useSelector(state => state.products.editProduct);
+    
+    useEffect(()=>{
+        saveProduct(editProduct);
+    },[editProduct])
+    
+    const editForm = (e) => {
+        saveProduct({
+            ...product,
+            [e.target.name] : e.target.value,
+        });
+    }
+
+    const submitProduct = e => {
+        e.preventDefault();
+
+        dispatch(editProductAction(product));
+
+        history('/');
+    }
+
     return (
         <div className="row justify-content-center">
             <div className="col-md-8">
@@ -10,14 +43,18 @@ const EditProduct = () => {
                             Editar Producto
                         </h2>
 
-                        <form>
+                        <form
+                            onSubmit={submitProduct}
+                        >
                             <div className="form-group">
                                 <label>Nombre Producto</label>
                                 <input
                                     type="text"
                                     className="form-control"
                                     placeholder="Nombre producto"
-                                    name="nombre"
+                                    name="name"
+                                    value={product.name}
+                                    onChange={editForm}
                                 />
                             </div>
                             <div className="form-group">
@@ -26,7 +63,9 @@ const EditProduct = () => {
                                     type="number"
                                     className="form-control"
                                     placeholder="Precio producto"
-                                    name="precio"
+                                    name="price"
+                                    value={Number(product.price)}
+                                    onChange={editForm}
                                 />
                             </div>
 

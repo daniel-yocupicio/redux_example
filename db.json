@@ -1,16 +1,6 @@
 {
   "productos": [
     {
-      "id": 1,
-      "name": "Jugo de Zanahoria",
-      "price": "31111"
-    },
-    {
-      "id": 2,
-      "name": "Jugo de Naranja",
-      "price": "1"
-    },
-    {
       "name": "Jugo de Naranja",
       "price": "300",
       "id": 3
@@ -31,8 +21,8 @@
       "id": 6
     },
     {
-      "name": "cr7",
-      "price": 123,
+      "name": "cr7 el mejor",
+      "price": "123000000000000",
       "id": 7
     },
     {
