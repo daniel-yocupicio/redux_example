@@ -1,31 +1,45 @@
 import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 // redux
 import {useDispatch, useSelector} from 'react-redux';
 // action crea
 import { createNewProductAction } from '../actions/productsActions';
+import { showAlerAction, hiddenAlerAction } from '../actions/alertAction';
 
-const NewProduct = ({history}) => {
+const NewProduct = () => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
+    const history = useNavigate();
 
     // crear dispatch
     const dispatch = useDispatch();
     // acceder al state del store
     const loading = useSelector(state => state.products.loading); 
     const error = useSelector(state => state.products.error); 
+    const alert = useSelector(state => state.alert.alert); 
     // usar el dispatch con la funcion con el action
     const addProduct = (product) => dispatch(createNewProductAction(product));
     // submit
     const submitNuevoProducto = e => {
         e.preventDefault();
 
-        if(name.trim() === '' && price.trim() === 0) {
+        if(name.trim() === '' && price === 0) {
+
+            const alert = {
+                msg: 'Ambos campos son obligatorios', 
+                classes: 'alert alert-danger text-center text-uppercase p3'
+            }
+
+            dispatch(showAlerAction(alert))
+
             return;
         }
 
+        dispatch(hiddenAlerAction());
+
         addProduct({name, price});
 
-        history.push('/');
+        history('/');
     };
 
     return (
@@ -36,6 +50,8 @@ const NewProduct = ({history}) => {
                         <h2 className="text-center mb-4 font-weight-bold">
                             Agregar Nuevo Producto
                         </h2>
+
+                        {alert !== null && <p className={alert.classes}>{alert.msg}</p>}
 
                         <form
                             onSubmit={submitNuevoProducto}
